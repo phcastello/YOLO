@@ -41,9 +41,9 @@ if __name__ == "__main__":
     loadModel()
     class_colors = getClassColors(model)
 
-    videoPath = "../dataset/test/ArvoreLaranja.mp4"
-    outputPath = "../dataset/test/ArvoreLaranja_processed.mp4"
-    outputCompressedPath = "../dataset/test/ArvoreLaranja_Compressed.mp4"
+    videoPath = "../test/1.mp4"
+    outputPath = "../test/1_out.mp4"
+    outputCompressedPath = "../test/1_comp.mp4"
 
     if not os.path.exists(videoPath):
         print("Error: File does not exist at the specified path.")
@@ -80,6 +80,8 @@ if __name__ == "__main__":
         results = model.predict(frame, conf=0.01, workers=20)
         prediction = results[0].boxes
 
+        oranges = 0
+
         if prediction is not None and len(prediction) > 0:
             boxes = prediction.xyxy
             confidences = prediction.conf
@@ -93,10 +95,17 @@ if __name__ == "__main__":
 
                 color = class_colors.get(cls, (0, 255, 0))  # Default to green if not found
 
+                # if cls == 49:
+                #     cv2.rectangle(frame, (x1, y1), (x2, y2), color, 3)
+                #     text_y = max(y1 - 10, 20)
+                #     cv2.putText(frame, label, (x1, text_y), cv2.FONT_HERSHEY_DUPLEX, 0.5, color, 1, cv2.LINE_AA)
+
+                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 3)
+                text_y = max(y1 - 10, 20)
+                cv2.putText(frame, label, (x1, text_y), cv2.FONT_HERSHEY_DUPLEX, 0.5, color, 1, cv2.LINE_AA)
+
                 if cls == 49:
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 3)
-                    text_y = max(y1 - 10, 20)
-                    cv2.putText(frame, label, (x1, text_y), cv2.FONT_HERSHEY_DUPLEX, 0.5, color, 1, cv2.LINE_AA)
+                    oranges += 1
 
         cv2.imshow("Video Processed by YOLO11n", frame)
         out.write(frame)
@@ -108,6 +117,7 @@ if __name__ == "__main__":
 
     # Ensure everything is properly closed
     print(f"\nProcessed {frame_idx} frames out of {frame_count}.")
+    print(f"Total orages found: {oranges}")
     vCap.release()
     out.release()
     cv2.destroyAllWindows()
