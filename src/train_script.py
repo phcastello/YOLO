@@ -21,7 +21,7 @@ results = model.train(
     data='/home/phcastello/Documentos/Cursos/ReconhecimentoImagem/CursoYolo/Dataset_final/data.yaml',  # Aleterar para o caminho absoluto
     epochs=150,
     batch=batch_supported,  # Usa o batch que a GPU suporta
-    accumulate=accumulate,  # Acumulação de gradientes
+    accumulate=accumulate,  # Acumulação de gradientes para usar um batch menor com efeito de um maior
     imgsz=640,
     device=device,
     patience=10,
@@ -32,7 +32,7 @@ results = model.train(
     degrees=10, translate=0.1, scale=0.5,
     shear=2, flipud=0.1, fliplr=0.5, mosaic=0.9,
 
-    # Mixup ativado (CutMix será adicionado via Albumentations)
+    # Mixup ativado (CutMix será adicionado via Albumentations no data.yaml)
     mixup=0.2,
 
     # TensorBoard
