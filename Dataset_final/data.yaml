@@ -1,0 +1,9 @@
+train: train/images
+val: valid/images
+test: test/images
+
+nc: 2
+names: ['Ripe', 'Unripe']
+
+augmentations:
+  - CutMix: { alpha: 0.3, p: 0.4 }
